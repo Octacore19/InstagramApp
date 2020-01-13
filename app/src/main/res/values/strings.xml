@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">InstagramApp</string>
+    <string name="login_text">login</string>
+    
+    //Instagram Credentials
+    <string name="app_id">1441577709349188</string>
+    <string name="redirect_url">https://instagram.com/</string>
+    <string name="base_url">https://api.instagram.com/</string>
 </resources>
