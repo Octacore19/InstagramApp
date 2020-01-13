@@ -1,7 +1,8 @@
-package com.iisystem.instagramapp
+package com.iisystem.instagramapp.profile.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.iisystem.instagramapp.R
 
 class MainActivity : AppCompatActivity() {
 
