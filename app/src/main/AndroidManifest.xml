@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".login.view.LoginActivity"></activity>
-        <activity android:name=".profile.view.MainActivity">
+        <activity android:name=".profile.view.ProfileActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

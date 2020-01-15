@@ -7,7 +7,6 @@ object AppPreferences {
 
     private val APP_PREFERENCE_FILE_NAME = "userdata"
     private lateinit var preferences : SharedPreferences
-    val USER_STATE = "user_state"
     val ACCESS_TOKEN = "access_token"
 
     fun initPreference(context: Context){

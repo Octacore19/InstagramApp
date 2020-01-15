@@ -4,6 +4,7 @@
     
     //Instagram Credentials
     <string name="app_id">1441577709349188</string>
+    <string name="client_secret">34efffc56b9184a6d6340d0b7e707f7a</string>
     <string name="redirect_url">https://instagram.com/</string>
     <string name="base_url">https://api.instagram.com/</string>
 </resources>

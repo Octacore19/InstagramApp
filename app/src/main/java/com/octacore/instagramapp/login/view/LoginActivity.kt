@@ -9,35 +9,33 @@ import android.util.Log
 import android.view.View
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import com.octacore.instagramapp.AppPreferences.ACCESS_TOKEN
-import com.octacore.instagramapp.AppPreferences.USER_STATE
+import androidx.lifecycle.ViewModelProviders
 import com.octacore.instagramapp.AppPreferences.putPreferenceString
 import com.octacore.instagramapp.R
-import com.octacore.instagramapp.profile.view.MainActivity
+import com.octacore.instagramapp.login.LoginRepository
+import com.octacore.instagramapp.login.network.LoginApiService
+import com.octacore.instagramapp.login.viewmodel.LoginViewModel
+import com.octacore.instagramapp.profile.view.ProfileActivity
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class LoginActivity : AppCompatActivity(){
-    private val TAG = LoginActivity::class.java.simpleName
-    private lateinit var appId: String
-    private lateinit var redirectUrl: String
-    private lateinit var baseUrl: String
-    private lateinit var requestUrl: String
+    private lateinit var mViewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
-        appId = resources.getString(R.string.app_id)
-        redirectUrl = resources.getString(R.string.redirect_url)
-        baseUrl = resources.getString(R.string.base_url)
-        requestUrl = baseUrl+"oauth/authorize/?client_id="+appId+"&redirect_uri="+redirectUrl+"&scope=user_profile,user_media&response_type=code"
 
+        mViewModel = ViewModelProviders.of(this).get(LoginViewModel::class.java)
         loginBtn.setOnClickListener {
-            login()
+            displayUrlOnWebView()
         }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun login(){
+    private fun displayUrlOnWebView(){
         loginBtn.visibility = View.GONE
         webView.visibility = View.VISIBLE
         webView.settings.javaScriptEnabled = true
@@ -48,7 +46,7 @@ class LoginActivity : AppCompatActivity(){
         webView.requestFocus()
         webView.isScrollbarFadingEnabled = false
         webView.isHorizontalScrollBarEnabled = false
-        webView.loadUrl(requestUrl)
+        webView.loadUrl(mViewModel.requestUrl)
         webView.webViewClient = object : WebViewClient() {
             override fun onPageFinished(view: WebView, url: String) {
                 super.onPageFinished(view, url)
@@ -56,14 +54,10 @@ class LoginActivity : AppCompatActivity(){
                 if (url.contains("?code=")) {
                     val uri = Uri.parse(url)
                     val decodedUri = uri.encodedQuery
-                    val accessToken = decodedUri!!.substring(decodedUri.lastIndexOf("=") + 1)
-                    Log.i(TAG, "Auth Token: $accessToken")
-
-                    putPreferenceString(USER_STATE, "saved")
-
-                    val intent = Intent(this@LoginActivity, MainActivity::class.java)
-                    intent.putExtra(ACCESS_TOKEN, accessToken)
-                    startActivity(intent)
+                    mViewModel.accessCode = decodedUri!!.substring(decodedUri.lastIndexOf("=") + 1)
+                    mViewModel.token = LoginRepository.getAccessToken(mViewModel.appId, mViewModel.clientSecret, mViewModel.redirectUrl, mViewModel.accessCode)
+                    putPreferenceString("access_token", mViewModel.token)
+                    startActivity(Intent(this@LoginActivity, ProfileActivity::class.java))
                     finish()
                 }
             }
