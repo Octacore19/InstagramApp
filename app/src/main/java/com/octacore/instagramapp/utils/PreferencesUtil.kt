@@ -18,19 +18,30 @@ object PreferencesUtil {
     const val USER_MEDIA = "user_media"
     const val AUTH_DATA = "auth_data"
     const val USER_DETAILS = "user_details"
+    const val LOGIN_STATUS = "login_status"
 
     fun initPreference(context: Context){
         preferences = context.getSharedPreferences(
             APP_PREFERENCE_FILE_NAME, Context.MODE_PRIVATE)
     }
 
-    fun getPreferenceString(key: String): String? {
-        return preferences.getString(key, null)
+    fun getPreference(key: String, value: String): String? {
+        return preferences.getString(key, value)
     }
 
-    fun putPreferenceString(key: String, value: String) {
+    fun getPreference(key: String, value: Boolean): Boolean?{
+        return preferences.getBoolean(key, value)
+    }
+
+    fun putPreference(key: String, value: String) {
         val editor = preferences.edit()
         editor.putString(key, value)
+        editor.apply()
+    }
+
+    fun putPreference(key: String, value: Boolean){
+        val editor = preferences.edit()
+        editor.putBoolean(key, value)
         editor.apply()
     }
 
