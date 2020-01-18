@@ -1,9 +1,7 @@
-package com.octacore.instagramapp.login.network
+package com.octacore.instagramapp.network
 
-import com.octacore.instagramapp.login.model.AuthModel
+import com.octacore.instagramapp.model.AuthModel
 import kotlinx.coroutines.Deferred
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import retrofit2.Response
 import retrofit2.http.*
 

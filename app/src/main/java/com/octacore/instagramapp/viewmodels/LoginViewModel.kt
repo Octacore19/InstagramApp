@@ -1,4 +1,4 @@
-package com.octacore.instagramapp.login.viewmodel
+package com.octacore.instagramapp.viewmodels
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -11,5 +11,4 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     var baseUrl = application.resources.getString(R.string.base_url)
     var requestUrl = baseUrl+"oauth/authorize/?client_id="+appId+"&redirect_uri="+redirectUrl+"&scope=user_profile,user_media&response_type=code"
     var accessCode = ""
-    var token = ""
 }
