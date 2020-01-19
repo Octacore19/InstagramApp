@@ -16,15 +16,14 @@ import com.octacore.instagramapp.viewmodels.ProfileViewModel
 import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
-    private val TAG = ProfileActivity::class.java.simpleName
     private lateinit var mViewModel: ProfileViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
-        setSupportActionBar(toolbar)
-        toolbar.title = " "
+        toolbar.title = "Nothing"
         toolbar.setTitleTextColor(resources.getColor(android.R.color.white))
+        setSupportActionBar(toolbar)
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         mViewModel.getAccessToken(intent)
 
