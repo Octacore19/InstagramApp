@@ -26,13 +26,10 @@ class LoginViewModel(application: Application) : AndroidViewModel(application), 
 
     override fun success(data: String, context: Activity) {
         accessCode = data
-        Log.i("LoginViewmodel", "Access Code: $accessCode")
         getAccessToken(appId, clientSecret, redirectUrl, accessCode, object : ApiCallHandler {
-
             override fun success(data: Any) {
                 moveToActivity(data, context)
             }
-
             override fun failed(title: String, reason: String) {
                 Log.e(TAG, title + reason)
             }

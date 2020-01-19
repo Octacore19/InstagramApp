@@ -1,9 +1,6 @@
 package com.octacore.instagramapp.repository
 
-import android.util.Log
 import com.octacore.instagramapp.handlers.ApiCallHandler
-import com.octacore.instagramapp.utils.PreferencesUtil.ACCESS_TOKEN
-import com.octacore.instagramapp.utils.PreferencesUtil.getPreference
 import com.octacore.instagramapp.network.ProfileApiService
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -40,27 +37,27 @@ object ProfileRepository {
                     val body = response.body()
                     handler.success(body!!)
                 } else{
-                    Log.i(TAG, "Not successful")
                     handler.failed("Request not successful", response.errorBody().toString())
                 }
             } catch (err: Exception){
-                err.printStackTrace()
                 handler.failed("Error in request", err.message!!)
             }
         }
     }
 
-    fun getSingleMedia(mediaId: String){
+    fun getSingleMedia(mediaId: String,accessToken: String, handler: ApiCallHandler){
         GlobalScope.launch(Dispatchers.Main) {
-            val request = service.getSingleMediaAsync(mediaId, "id,media_type,media_url,username,timestamp", getPreference(ACCESS_TOKEN, "")!!)
+            val request = service.getSingleMediaAsync(mediaId, "id,media_type,media_url,username,timestamp", accessToken)
             try {
                 val response = request.await()
-                Log.i(TAG, "Single Media Data: $response")
                 if (response.isSuccessful){
                     val body = response.body()
+                    handler.success(body!!)
+                } else{
+                    handler.failed("Request not successful", response.errorBody().toString())
                 }
             } catch (err: Exception){
-                err.printStackTrace()
+                handler.failed("Error in request", err.message!!)
             }
         }
     }

@@ -4,13 +4,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.google.gson.Gson
-import com.octacore.instagramapp.utils.PreferencesUtil.USER_MEDIA
-import com.octacore.instagramapp.utils.PreferencesUtil.getPreference
+import androidx.recyclerview.widget.GridLayoutManager
 import com.octacore.instagramapp.R
-import com.octacore.instagramapp.model.UserMediaModel
+import com.octacore.instagramapp.adapters.ProfileAdapter
 import com.octacore.instagramapp.viewmodels.ProfileViewModel
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_profile.*
 
 class ProfileActivity : AppCompatActivity() {
     private val TAG = ProfileActivity::class.java.simpleName
@@ -18,25 +16,27 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_profile)
         mViewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         mViewModel.getAccessToken(intent)
+
+        mViewModel.username.observe(this, Observer { username ->
+            usernameTextview.text = username
+        })
+
+        mViewModel.mediaCount.observe(this, Observer { mediaCount ->
+            mediaCountTextview.text = mediaCount
+        })
+/*
+        media_recycler.adapter = ProfileAdapter(mViewModel.mediaIDs!!, mViewModel.accessToken, this)
+        media_recycler.layoutManager = GridLayoutManager(this, 3)*/
     }
 
     override fun onResume() {
         super.onResume()
-        mViewModel.username.observe(this, Observer { username ->
-            usernameTextview.text = username
+        mViewModel.mediaIDs.observe(this, Observer { mediaIDs ->
+            media_recycler.adapter = ProfileAdapter(mediaIDs, mViewModel.accessToken, this)
+            media_recycler.layoutManager = GridLayoutManager(this, 3)
         })
-        mViewModel.mediaCount.observe(this, Observer { mediaCount ->
-            mediaCountTextview.text = mediaCount
-        })
-    }
-
-    private fun getUserMedia(index : Int) : String{
-        val gson = Gson()
-        val media = getPreference(USER_MEDIA, "")
-        val mediaObject = gson.fromJson(media, UserMediaModel::class.java)
-        return mediaObject.data[index].id
     }
 }
