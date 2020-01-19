@@ -46,6 +46,7 @@ class LoginViewModel(application: Application) : AndroidViewModel(application), 
         intent.putExtra(ACCESS_TOKEN, model.access_token)
         intent.putExtra(USER_ID, model.user_id)
         context.startActivity(intent)
+        context.overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         context.finish()
     }
 }
