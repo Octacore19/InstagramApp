@@ -53,9 +53,9 @@ class ProfileActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.logout){
+            clearPreferences(applicationContext)
             startActivity(Intent(this, LoginActivity::class.java))
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            clearPreferences()
             finish()
         }
         return super.onOptionsItemSelected(item)

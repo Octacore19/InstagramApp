@@ -2,6 +2,9 @@ package com.octacore.instagramapp.utils
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.octacore.instagramapp.BaseApplication
+import java.io.File
+
 
 object PreferencesUtil {
 
@@ -45,9 +48,10 @@ object PreferencesUtil {
         editor.apply()
     }
 
-    fun clearPreferences() {
+    fun clearPreferences(context: Context) {
         val editor = preferences.edit()
         editor.clear()
         editor.apply()
+        context.cacheDir.deleteRecursively()
     }
 }
