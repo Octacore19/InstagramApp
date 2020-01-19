@@ -11,7 +11,8 @@ import com.octacore.instagramapp.handlers.ApiCallHandler
 import com.octacore.instagramapp.model.AuthModel
 import com.octacore.instagramapp.repository.LoginRepository.getAccessToken
 import com.octacore.instagramapp.utils.PreferencesUtil
-import com.octacore.instagramapp.utils.PreferencesUtil.LOGIN_STATUS
+import com.octacore.instagramapp.utils.PreferencesUtil.ACCESS_TOKEN
+import com.octacore.instagramapp.utils.PreferencesUtil.USER_ID
 import com.octacore.instagramapp.utils.PreferencesUtil.putPreference
 import com.octacore.instagramapp.views.ProfileActivity
 
@@ -28,6 +29,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application), 
         accessCode = data
         getAccessToken(appId, clientSecret, redirectUrl, accessCode, object : ApiCallHandler {
             override fun success(data: Any) {
+                val model = data as AuthModel
+                putPreference(ACCESS_TOKEN, model.access_token)
+                putPreference(USER_ID, model.user_id)
                 moveToActivity(data, context)
             }
             override fun failed(title: String, reason: String) {
@@ -39,10 +43,9 @@ class LoginViewModel(application: Application) : AndroidViewModel(application), 
     private fun moveToActivity(data: Any, context: Activity){
         val model = data as AuthModel
         val intent = Intent(context, ProfileActivity::class.java)
-        intent.putExtra(PreferencesUtil.ACCESS_TOKEN, model.access_token)
-        intent.putExtra(PreferencesUtil.USER_ID, model.user_id)
+        intent.putExtra(ACCESS_TOKEN, model.access_token)
+        intent.putExtra(USER_ID, model.user_id)
         context.startActivity(intent)
-        putPreference(LOGIN_STATUS, true)
         context.finish()
     }
 }

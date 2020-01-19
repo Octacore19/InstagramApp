@@ -10,7 +10,9 @@ import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.octacore.instagramapp.R
+import com.octacore.instagramapp.utils.PreferencesUtil.ACCESS_TOKEN
 import com.octacore.instagramapp.utils.PreferencesUtil.LOGIN_STATUS
+import com.octacore.instagramapp.utils.PreferencesUtil.USER_ID
 import com.octacore.instagramapp.utils.PreferencesUtil.getPreference
 import com.octacore.instagramapp.viewmodels.LoginViewModel
 import kotlinx.android.synthetic.main.activity_login.*
@@ -27,15 +29,22 @@ class LoginActivity : AppCompatActivity(){
         loginBtn.setOnClickListener {
             displayUrlOnWebView()
         }
+    }
 
-        /*if (getPreference(LOGIN_STATUS, false) == true){
-            startActivity(Intent(this, ProfileActivity::class.java))
+    override fun onResume() {
+        super.onResume()
+        if (getPreference(ACCESS_TOKEN, "") != null && getPreference(ACCESS_TOKEN, "") != ""){
+            val intent = Intent(this, ProfileActivity::class.java)
+            intent.putExtra(ACCESS_TOKEN, getPreference(ACCESS_TOKEN, ""))
+            intent.putExtra(USER_ID, getPreference(USER_ID, ""))
+            startActivity(intent)
             finish()
-        }*/
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun displayUrlOnWebView(){
+        imageView.visibility = View.GONE
         loginBtn.visibility = View.GONE
         webView.visibility = View.VISIBLE
         webView.settings.javaScriptEnabled = true

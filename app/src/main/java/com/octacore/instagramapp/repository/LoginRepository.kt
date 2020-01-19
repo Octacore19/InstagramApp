@@ -7,7 +7,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 object LoginRepository {
-    private val TAG = LoginRepository::class.java.simpleName
     private val service = LoginApiService.createService()
 
     fun getAccessToken(clientId: String, clientSecret: String, redirectUrl: String, accessCode: String, handler: ApiCallHandler){
@@ -19,10 +18,10 @@ object LoginRepository {
                     val body = response.body()
                     handler.success(body!!)
                 } else{
-                    handler.failed("Request not successful", response.errorBody().toString())
+                    handler.failed("Fetching access token not successful: ", response.code().toString())
                 }
             } catch (err: Exception){
-                handler.failed("Error in request", err.message!!)
+                handler.failed("Error in fetching access token: ", err.message!!)
             }
         }
     }

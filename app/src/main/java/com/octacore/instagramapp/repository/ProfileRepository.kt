@@ -7,7 +7,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 object ProfileRepository {
-    private val TAG = ProfileRepository::class.java.simpleName
     private val service = ProfileApiService.createService()
 
     fun getUserDetails(userID: String, accessToken: String, handler: ApiCallHandler){
@@ -19,10 +18,10 @@ object ProfileRepository {
                     val body = response.body()
                     handler.success(body!!)
                 } else{
-                    handler.failed("Request not successful", response.errorBody().toString())
+                    handler.failed("Fetching user details not successful: ", response.code().toString())
                 }
             } catch (err: Exception){
-                handler.failed("Error in request", err.message!!)
+                handler.failed("Error in fetching user details: ", err.message!!)
             }
         }
 
@@ -37,10 +36,10 @@ object ProfileRepository {
                     val body = response.body()
                     handler.success(body!!)
                 } else{
-                    handler.failed("Request not successful", response.errorBody().toString())
+                    handler.failed("Fetching user media not successful: ", response.code().toString())
                 }
             } catch (err: Exception){
-                handler.failed("Error in request", err.message!!)
+                handler.failed("Error in fetching user media: ", err.message!!)
             }
         }
     }
@@ -54,10 +53,10 @@ object ProfileRepository {
                     val body = response.body()
                     handler.success(body!!)
                 } else{
-                    handler.failed("Request not successful", response.errorBody().toString())
+                    handler.failed("Fetching a single media not successful: ", response.code().toString())
                 }
             } catch (err: Exception){
-                handler.failed("Error in request", err.message!!)
+                handler.failed("Error in fetching a single media: ", err.message!!)
             }
         }
     }
